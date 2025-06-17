@@ -10,7 +10,9 @@ const app = await alchemy("alchemy-test", {
   phase: process.argv.includes("--destroy") ? "destroy" : "up",
 })
 
-const worker = await Worker("mcp-docs", {
+const API_KEY = alchemy.secret(process.env.ALCHEMY_API_KEY)
+
+export const worker = await Worker("mcp-docs", {
   entrypoint: "./src/worker.ts",
   url: true,
   bindings: {
@@ -21,8 +23,12 @@ const worker = await Worker("mcp-docs", {
       className: "CloudflareDocumentationMCP",
       sqlite: true,
     }),
+    API_KEY,
+    MCP_SERVER_NAME: "cloudflare-docs",
+    MCP_SERVER_VERSION: "0.0.1",
   },
 })
+
 
 console.log(`Worker deployed at: ${worker.url}`)
 

@@ -25,9 +25,10 @@ function createApiHandler<
 export type Props = never
 export type State = never
 
+
 export class CloudflareDocumentationMCP extends McpAgent<Env, State, Props> {
   server = new CloudflareMCPServer({
-    wae: env,
+    wae: env.API_KEY,
     serverInfo: {
       name: env.MCP_SERVER_NAME,
       version: env.MCP_SERVER_VERSION,
