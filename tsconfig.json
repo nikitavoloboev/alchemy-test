@@ -17,7 +17,7 @@
     "composite": true,
     "downlevelIteration": true,
     "noUncheckedIndexedAccess": true,
-    "types": ["bun-types"]
+    "types": ["bun-types", "@cloudflare/workers-types", "./env.d.ts"]
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "env.d.ts"]
 }

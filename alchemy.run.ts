@@ -1,19 +1,29 @@
 import alchemy from "alchemy"
-import { Worker } from "alchemy/cloudflare"
+import {
+  Worker,
+  AnalyticsEngineDataset,
+  DurableObjectNamespace,
+} from "alchemy/cloudflare"
 
-// Initialize the Alchemy application scope
-const app = await alchemy("my-first-app", {
+const app = await alchemy("alchemy-test", {
   stage: "dev",
   phase: process.argv.includes("--destroy") ? "destroy" : "up",
 })
 
-// Create a simple worker
-const worker = await Worker("hello-worker", {
+const worker = await Worker("mcp-docs", {
   entrypoint: "./src/worker.ts",
-  url: true, // Enable workers.dev subdomain
+  url: true,
+  bindings: {
+    MCP_METRICS: new AnalyticsEngineDataset("mcp-metrics", {
+      dataset: "MCP_METRICS",
+    }),
+    MCP_OBJECT: new DurableObjectNamespace("mcp-object", {
+      className: "CloudflareDocumentationMCP",
+      sqlite: true,
+    }),
+  },
 })
 
 console.log(`Worker deployed at: ${worker.url}`)
 
-// Finalize the app to apply changes
 await app.finalize()
